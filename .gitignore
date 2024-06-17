@@ -1,3 +1,9 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
 # Compiled class file
 *.class
 
@@ -54,14 +60,14 @@ target/
 *.sln.docstates
 
 # NetBeans
-nbproject/private/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 build/
-nbbuild/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-release/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 # VS Code
 .vscode/
@@ -73,3 +79,12 @@ release/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
