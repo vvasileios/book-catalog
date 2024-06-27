@@ -11,30 +11,30 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/")
 public class BookController {
   @Autowired
   private BookService bookService;
 
-  @GetMapping
+  @GetMapping("/books")
   public List<Book> getAllBooks(@RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
     return bookService.getAllBooks(page, size);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/book/{id}")
   public ResponseEntity<Book> getBookById(@PathVariable Long id) {
     Optional<Book> book = bookService.getBookById(id);
     return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  @PostMapping
+  @PostMapping("/book/add")
   @Secured("ROLE_ADMIN")
   public Book addBook(@RequestBody Book book) {
     return bookService.addBook(book);
   }
 
-  @PutMapping("/{id}")
+  @PutMapping("/book/{id}")
   @Secured("ROLE_ADMIN")
   public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
     Book updatedBook = bookService.updateBook(id, bookDetails);
@@ -45,14 +45,14 @@ public class BookController {
     }
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/book/{id}")
   @Secured("ROLE_ADMIN")
   public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
     bookService.deleteBook(id);
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/search")
+  @GetMapping("/book/search")
   public List<Book> searchBooks(@RequestParam(required = false) String title,
       @RequestParam(required = false) String author) {
     return bookService.searchBooks(title, author);
