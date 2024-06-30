@@ -36,13 +36,13 @@ public class BookService {
     bookRepository.deleteById(id);
   }
 
-  public List<Book> getBooksByTitle(String title) {
-    return bookRepository.findByTitleContainingIgnoreCase(title);
-  }
+  // public List<Book> getBooksByTitle(String title) {
+  // return bookRepository.findByTitleContainingIgnoreCase(title);
+  // }
 
-  public List<Book> getBooksByAuthor(String author) {
-    return bookRepository.findByAuthorContainingIgnoreCase(author);
-  }
+  // public List<Book> getBooksByAuthor(String author) {
+  // return bookRepository.findByAuthorContainingIgnoreCase(author);
+  // }
 
   public List<Book> getBooksByPage(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
@@ -63,13 +63,13 @@ public class BookService {
     return null;
   }
 
-  public List<Book> searchBooks(String title, String author) {
-    if (title != null && !title.isEmpty()) {
-      return bookRepository.findByTitleContainingIgnoreCase(title);
-    } else if (author != null && !author.isEmpty()) {
-      return bookRepository.findByAuthorContainingIgnoreCase(title);
-    } else {
-      return bookRepository.findAll();
-    }
-  }
+  // public List<Book> searchBooks(String title, String author) {
+  // if (title != null && !title.isEmpty()) {
+  // return bookRepository.findByTitleContainingIgnoreCase(title);
+  // } else if (author != null && !author.isEmpty()) {
+  // return bookRepository.findByAuthorContainingIgnoreCase(title);
+  // } else {
+  // return bookRepository.findAll();
+  // }
+  // }
 }
