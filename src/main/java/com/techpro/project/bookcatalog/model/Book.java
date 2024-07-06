@@ -19,19 +19,21 @@ public class Book {
   private String author;
   @Column(name = "summary")
   private String summary;
-  @Column(name = "year")
-  private int year;
+  @Column(name = "published")
+  private boolean published;
+  @Column(name = "publicationYear")
+  private int publicationYear;
   @Column(name = "genre")
   private String genre;
 
   public Book() {
   }
 
-  public Book(String title, String author, String summary, int year, String genre) {
+  public Book(String title, String author, String summary, int publicationYear, String genre) {
     this.title = title;
     this.author = author;
     this.summary = summary;
-    this.year = year;
+    this.publicationYear = publicationYear;
     this.genre = genre;
   }
 
@@ -64,12 +66,12 @@ public class Book {
     this.summary = summary;
   }
 
-  public int getYear() {
-    return year;
+  public int getPublicationYear() {
+    return publicationYear;
   }
 
-  public void setYear(int year) {
-    this.year = year;
+  public void setPublicationYear(int year) {
+    this.publicationYear = year;
   }
 
   public String getGenre() {
@@ -87,7 +89,8 @@ public class Book {
         ", title='" + title + '\'' +
         ", author='" + author + '\'' +
         ", summary='" + summary + '\'' +
-        ", year=" + year +
+        ", published=" + published +
+        ", year=" + publicationYear +
         ", genre='" + genre + '\'' +
         '}';
   }

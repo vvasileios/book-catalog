@@ -36,7 +36,7 @@ public class BookController {
       if (title == null)
         bookRepository.findAll().forEach(books::add);
       else
-        bookRepository.findByTitleContainingIgnoreCase(title).forEach(books::add);
+        bookRepository.findByTitleContaining(title).forEach(books::add);
 
       if (books.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
