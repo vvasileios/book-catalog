@@ -2,6 +2,7 @@ package com.techpro.project.bookcatalog.controller;
 
 import com.techpro.project.bookcatalog.model.Book;
 import com.techpro.project.bookcatalog.repository.BookRepository;
+import com.techpro.project.bookcatalog.exception.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +24,13 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/books")
 public class BookController {
   @Autowired
   BookRepository bookRepository;
 
-  @GetMapping("/books")
+  // #region Get books/book
+  @GetMapping
   public ResponseEntity<List<Book>> getAllBooks(@RequestParam(required = false) String title) {
     try {
       List<Book> books = new ArrayList<Book>();
@@ -39,27 +41,29 @@ public class BookController {
         bookRepository.findByTitleContainingIgnoreCase(title).forEach(books::add);
 
       if (books.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        throw new ResourceNotFoundException("No books found. Please consider adding some books!");
       }
 
       return new ResponseEntity<>(books, HttpStatus.OK);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error retrieving books", e);
     }
   }
 
-  @GetMapping("/books/{id}")
+  @GetMapping("books/{id}")
   public ResponseEntity<Book> getBookById(@PathVariable("id") Long id) {
     Optional<Book> bookData = bookRepository.findById(id);
 
     if (bookData.isPresent()) {
       return new ResponseEntity<>(bookData.get(), HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new ResourceNotFoundException("Book not found with id: " + id);
     }
   }
+  // #endregion
 
-  @PostMapping("/book")
+  // #region Create books
+  @PostMapping("book")
   public ResponseEntity<Book> createBook(@RequestBody Book book) {
     try {
       Book _book = bookRepository
@@ -67,21 +71,23 @@ public class BookController {
               book.getPublicationYear(), book.getGenre()));
       return new ResponseEntity<>(_book, HttpStatus.CREATED);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error creating book", e);
     }
   }
 
-  @PostMapping("/books")
+  @PostMapping("books")
   public ResponseEntity<List<Book>> createBooks(@RequestBody List<Book> books) {
     try {
       List<Book> _books = bookRepository.saveAll(books);
       return new ResponseEntity<>(_books, HttpStatus.CREATED);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error creating books", e);
     }
   }
+  // #endregion
 
-  @PutMapping("/books/{id}")
+  // #region Update book/books
+  @PutMapping("books/{id}")
   public ResponseEntity<Book> updateBook(@PathVariable("id") Long id, @RequestBody Book book) {
     Optional<Book> bookData = bookRepository.findById(id);
 
@@ -95,11 +101,13 @@ public class BookController {
       _book.setGenre(book.getGenre());
       return new ResponseEntity<>(bookRepository.save(_book), HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new ResourceNotFoundException("Book not found with id: " + id);
     }
   }
+  // #endregion
 
-  @DeleteMapping("/books/{id}")
+  // #region Delete book/books
+  @DeleteMapping("books/{id}")
   public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") Long id) {
     try {
       bookRepository.deleteById(id);
@@ -109,7 +117,7 @@ public class BookController {
     }
   }
 
-  @DeleteMapping("/books")
+  @DeleteMapping("books")
   public ResponseEntity<HttpStatus> deleteAllBooks() {
     try {
       bookRepository.deleteAll();
@@ -118,47 +126,63 @@ public class BookController {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  // #endregion
 
-  // search functionality
-  @GetMapping("/books/published")
+  // #region Search book/books
+  @GetMapping("books/published")
   public ResponseEntity<List<Book>> findByPublished(@RequestParam boolean status) {
     try {
       List<Book> books = bookRepository.findByPublished(status);
 
       if (books.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        throw new ResourceNotFoundException("No books found with published status: " + status);
       }
       return new ResponseEntity<>(books, HttpStatus.OK);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error retrieving books with published status: " + status, e);
     }
   }
 
-  @GetMapping("/books/author")
+  @GetMapping("books/author")
   public ResponseEntity<List<Book>> findByAuthor(@RequestParam String author) {
     try {
       List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
 
       if (books.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        throw new ResourceNotFoundException("No books found with author: " + author);
       }
       return new ResponseEntity<>(books, HttpStatus.OK);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error retrieving books with author: " + author, e);
     }
   }
 
-  @GetMapping("/books/title")
+  @GetMapping("books/title")
   public ResponseEntity<List<Book>> findByTitle(@RequestParam String title) {
     try {
       List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
       if (books.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        throw new ResourceNotFoundException("No books found with title: " + title);
       }
       return new ResponseEntity<>(books, HttpStatus.OK);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new RuntimeException("Error retrieving books with title: " + title, e);
     }
   }
+
+  @GetMapping("books/genre")
+  public ResponseEntity<List<Book>> findByGenre(@RequestParam String genre) {
+    try {
+      List<Book> books = bookRepository.findByGenreContainingIgnoreCase(genre);
+
+      if (books.isEmpty()) {
+        throw new ResourceNotFoundException("No books found with genre: " + genre);
+      }
+      return new ResponseEntity<>(books, HttpStatus.OK);
+    } catch (Exception e) {
+      throw new RuntimeException("Error retrieving books with genre: " + genre, e);
+    }
+  }
+  // #endregion
 }
