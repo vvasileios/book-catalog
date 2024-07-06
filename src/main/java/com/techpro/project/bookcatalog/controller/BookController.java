@@ -109,6 +109,7 @@ public class BookController {
     }
   }
 
+  // search functionality
   @GetMapping("/books/published")
   public ResponseEntity<List<Book>> findByPublished() {
     try {
