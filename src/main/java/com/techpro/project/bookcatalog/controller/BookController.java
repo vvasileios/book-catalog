@@ -59,13 +59,23 @@ public class BookController {
     }
   }
 
-  @PostMapping("/books")
+  @PostMapping("/book")
   public ResponseEntity<Book> createBook(@RequestBody Book book) {
     try {
       Book _book = bookRepository
           .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
               book.getPublicationYear(), book.getGenre()));
       return new ResponseEntity<>(_book, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PostMapping("/books")
+  public ResponseEntity<List<Book>> createBooks(@RequestBody List<Book> books) {
+    try {
+      List<Book> _books = bookRepository.saveAll(books);
+      return new ResponseEntity<>(_books, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
