@@ -133,4 +133,32 @@ public class BookController {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  @GetMapping("/books/author")
+  public ResponseEntity<List<Book>> findByAuthor(@RequestParam String author) {
+    try {
+      List<Book> books = bookRepository.findByAuthorContaining(author);
+
+      if (books.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(books, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @GetMapping("/books/title")
+  public ResponseEntity<List<Book>> findByTitle(@RequestParam String title) {
+    try {
+      List<Book> books = bookRepository.findByTitleContaining(title);
+
+      if (books.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(books, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
