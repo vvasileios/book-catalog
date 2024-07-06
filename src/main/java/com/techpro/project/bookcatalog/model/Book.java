@@ -1,28 +1,43 @@
 package com.techpro.project.bookcatalog.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "books")
 public class Book {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+  @Column(name = "title")
   private String title;
+  @Column(name = "author")
   private String author;
+  @Column(name = "summary")
   private String summary;
+  @Column(name = "year")
   private int year;
+  @Column(name = "genre")
   private String genre;
+
+  public Book() {
+  }
+
+  public Book(String title, String author, String summary, int year, String genre) {
+    this.title = title;
+    this.author = author;
+    this.summary = summary;
+    this.year = year;
+    this.genre = genre;
+  }
 
   // Getters and Setters
   public Long getId() {
     return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public String getTitle() {
@@ -63,5 +78,17 @@ public class Book {
 
   public void setGenre(String genre) {
     this.genre = genre;
+  }
+
+  @Override
+  public String toString() {
+    return "Book{" +
+        "id=" + id +
+        ", title='" + title + '\'' +
+        ", author='" + author + '\'' +
+        ", summary='" + summary + '\'' +
+        ", year=" + year +
+        ", genre='" + genre + '\'' +
+        '}';
   }
 }
