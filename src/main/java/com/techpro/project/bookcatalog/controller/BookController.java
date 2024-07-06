@@ -58,4 +58,68 @@ public class BookController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
+
+  @PostMapping("/books")
+  public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    try {
+      Book _book = bookRepository
+          .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
+              book.getPublicationYear(), book.getGenre()));
+      return new ResponseEntity<>(_book, HttpStatus.CREATED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PutMapping("/books/{id}")
+  public ResponseEntity<Book> updateBook(@PathVariable("id") Long id, @RequestBody Book book) {
+    Optional<Book> bookData = bookRepository.findById(id);
+
+    if (bookData.isPresent()) {
+      Book _book = bookData.get();
+      _book.setTitle(book.getTitle());
+      _book.setAuthor(book.getAuthor());
+      _book.setSummary(book.getSummary());
+      _book.setPublished(book.isPublished());
+      _book.setPublicationYear(book.getPublicationYear());
+      _book.setGenre(book.getGenre());
+      return new ResponseEntity<>(bookRepository.save(_book), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @DeleteMapping("/books/{id}")
+  public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") Long id) {
+    try {
+      bookRepository.deleteById(id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @DeleteMapping("/books")
+  public ResponseEntity<HttpStatus> deleteAllBooks() {
+    try {
+      bookRepository.deleteAll();
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @GetMapping("/books/published")
+  public ResponseEntity<List<Book>> findByPublished() {
+    try {
+      List<Book> books = bookRepository.findByPublished(true);
+
+      if (books.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(books, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

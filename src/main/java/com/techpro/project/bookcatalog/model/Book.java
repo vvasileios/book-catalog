@@ -29,7 +29,7 @@ public class Book {
   public Book() {
   }
 
-  public Book(String title, String author, String summary, int publicationYear, String genre) {
+  public Book(String title, String author, String summary, boolean published, int publicationYear, String genre) {
     this.title = title;
     this.author = author;
     this.summary = summary;
@@ -64,6 +64,14 @@ public class Book {
 
   public void setSummary(String summary) {
     this.summary = summary;
+  }
+
+  public boolean isPublished() {
+    return published;
+  }
+
+  public void setPublished(boolean published) {
+    this.published = published;
   }
 
   public int getPublicationYear() {
