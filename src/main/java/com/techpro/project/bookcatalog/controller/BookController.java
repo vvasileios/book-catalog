@@ -36,7 +36,7 @@ public class BookController {
       if (title == null)
         bookRepository.findAll().forEach(books::add);
       else
-        bookRepository.findByTitleContaining(title).forEach(books::add);
+        bookRepository.findByTitleContainingIgnoreCase(title).forEach(books::add);
 
       if (books.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -121,9 +121,9 @@ public class BookController {
 
   // search functionality
   @GetMapping("/books/published")
-  public ResponseEntity<List<Book>> findByPublished() {
+  public ResponseEntity<List<Book>> findByPublished(@RequestParam boolean status) {
     try {
-      List<Book> books = bookRepository.findByPublished(true);
+      List<Book> books = bookRepository.findByPublished(status);
 
       if (books.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -137,7 +137,7 @@ public class BookController {
   @GetMapping("/books/author")
   public ResponseEntity<List<Book>> findByAuthor(@RequestParam String author) {
     try {
-      List<Book> books = bookRepository.findByAuthorContaining(author);
+      List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
 
       if (books.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -151,7 +151,7 @@ public class BookController {
   @GetMapping("/books/title")
   public ResponseEntity<List<Book>> findByTitle(@RequestParam String title) {
     try {
-      List<Book> books = bookRepository.findByTitleContaining(title);
+      List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
       if (books.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
