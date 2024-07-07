@@ -32,7 +32,8 @@ public class HomeController {
 
     Map<String, String> project = new LinkedHashMap<>();
     project.put("Project Name", "Book Catalog API");
-    project.put("Data", "Initial data on the h2 database are provided at the initialization.");
+    project.put("Data", "Initial data on the h2 in-memory database are provided at initialization.");
+    project.put("Swagger", "http://localhost:8080/swagger-ui/index.html#/");
 
     response.put("project", project);
 

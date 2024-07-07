@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class BookServiceCustom implements BookService {
@@ -45,6 +46,12 @@ public class BookServiceCustom implements BookService {
   @Override
   public ResponseEntity<Book> createBook(Book book) {
     try {
+      Optional<Book> existingBook = bookRepository.findByTitleAndAuthorContainingIgnoreCase(book.getTitle(),
+          book.getAuthor());
+      if (existingBook.isPresent()) {
+        throw new RuntimeException(
+            "Book already exists with title: " + book.getTitle() + " and author: " + book.getAuthor());
+      }
       Book _book = bookRepository
           .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
               book.getPublicationYear(), book.getGenre()));
@@ -57,8 +64,25 @@ public class BookServiceCustom implements BookService {
   @Override
   public ResponseEntity<List<Book>> createBooks(List<Book> books) {
     try {
-      List<Book> _books = bookRepository.saveAll(books);
-      return new ResponseEntity<>(_books, HttpStatus.CREATED);
+      List<Book> existingBooks = bookRepository.findAll();
+      List<Book> newBooks = new ArrayList<>();
+
+      for (Book book : books) {
+        boolean exists = false;
+        for (Book existingBook : existingBooks) {
+          if (existingBook.getTitle().equalsIgnoreCase(book.getTitle())
+              && existingBook.getAuthor().equalsIgnoreCase(book.getAuthor())) {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          newBooks.add(book);
+        }
+      }
+
+      List<Book> savedBooks = bookRepository.saveAll(newBooks);
+      return new ResponseEntity<>(savedBooks, HttpStatus.CREATED);
     } catch (Exception e) {
       throw new RuntimeException("Error creating books", e);
     }
