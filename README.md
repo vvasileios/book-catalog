@@ -44,9 +44,17 @@ The dependencies are managed using Maven. You can find them in the `pom.xml` fil
 
 ### Setup
 
-1. Clone the repository:
+If you don't have JDK and Maven installed:
+- Download the JDK from the official website:
+  - [Oracle JDK](https://www.oracle.com/java/technologies/javase-jdk22-downloads.html)
+  - [OpenJDK](https://jdk.java.net/22/)
+- Download Apache Maven from the official website:
+  - [Apache Maven](https://maven.apache.org/download.cgi)
+
+After the installation for your operating system use the below steps to proceed:
+1. Clone the repository: 
     ```sh
-    git clone https://github.com/yourusername/bookcatalog.git
+    git clone https://github.com/vvasileios/book-catalog.git
     cd bookcatalog
     ```
 
@@ -62,7 +70,7 @@ To run the project, use the following command:
 mvn spring-boot:run
 ```
 
-The application run at `http://localhost`. When loaded it provides extra information about the project.
+The application run at `http://localhost:8080`. When loaded it provides extra information about the project.
 
 ## API Endpoints
 
