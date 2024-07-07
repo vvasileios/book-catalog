@@ -34,6 +34,8 @@ public class HomeController {
     project.put("Project Name", "Book Catalog API");
     project.put("Data", "Initial data on the h2 database are provided at the initialization.");
 
+    response.put("project", project);
+
     Map<String, String> info = new LinkedHashMap<>();
     info.put("Version", "1.0");
     info.put("Last Update", "2024-07-07");
