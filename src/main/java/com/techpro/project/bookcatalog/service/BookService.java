@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 public interface BookService {
-  ResponseEntity<List<Book>> getAllBooks(String title);
+  ResponseEntity<List<Book>> getAllBooks();
 
   ResponseEntity<Book> getBookById(Long id);
 

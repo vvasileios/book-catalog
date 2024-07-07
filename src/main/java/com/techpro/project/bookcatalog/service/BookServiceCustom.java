@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +17,9 @@ public class BookServiceCustom implements BookService {
   BookRepository bookRepository;
 
   @Override
-  public ResponseEntity<List<Book>> getAllBooks(String title) {
+  public ResponseEntity<List<Book>> getAllBooks() {
     try {
-      List<Book> books = new ArrayList<Book>();
-
-      if (title == null)
-        bookRepository.findAll().forEach(books::add);
-      else
-        bookRepository.findByTitleContainingIgnoreCase(title).forEach(books::add);
+      List<Book> books = bookRepository.findAll();
 
       if (books.isEmpty()) {
         throw new NoSuchBookExistException("No books found.");
