@@ -30,12 +30,16 @@ public class HomeController {
 
     response.put("endpoints", endpoints);
 
-    // Adding general information
+    Map<String, String> project = new LinkedHashMap<>();
+    project.put("Project Name", "Book Catalog API");
+    project.put("Data", "Initial data on the h2 database are provided at the initialization.");
+
     Map<String, String> info = new LinkedHashMap<>();
     info.put("Version", "1.0");
-    info.put("Last Update", "2023-04-01");
-    info.put("Notice", "This API is for educational purposes only.");
-    info.put("Contact", "support@bookcatalogapi.com");
+    info.put("Last Update", "2024-07-07");
+    info.put("Notice", "This API is for educational and project based purposes only.");
+    info.put("Contact", "vasileios.vasileiadis@techproacademy.com");
+    info.put("Developer", "Vasileios Vasileiadis");
 
     response.put("info", info);
 
