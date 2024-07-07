@@ -1,12 +1,14 @@
 package com.techpro.project.bookcatalog.service;
 
 import com.techpro.project.bookcatalog.model.Book;
+import com.techpro.project.bookcatalog.model.BookInfo;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.List;
 
 public interface BookService {
-  ResponseEntity<List<Book>> getAllBooks();
+  ResponseEntity<List<BookInfo>> getAllBooks();
 
   ResponseEntity<Book> getBookById(Long id);
 

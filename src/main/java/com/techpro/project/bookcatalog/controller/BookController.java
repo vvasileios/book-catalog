@@ -1,6 +1,7 @@
 package com.techpro.project.bookcatalog.controller;
 
 import com.techpro.project.bookcatalog.model.Book;
+import com.techpro.project.bookcatalog.model.BookInfo;
 import com.techpro.project.bookcatalog.service.BookService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,14 +36,14 @@ public class BookController {
 
   // #region Get books/book
   @Tag(name = "Get", description = "Get books")
-  @Operation(summary = "Get all books", description = "Get all books or filter by title")
+  @Operation(summary = "Get all books", description = "Get all books")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
-          @Content(mediaType = "application/json", schema = @Schema(implementation = Book.class)) }),
+          @Content(mediaType = "application/json", schema = @Schema(implementation = BookInfo.class)) }),
       @ApiResponse(responseCode = "404", description = "No books found. Please consider adding some books!", content = @Content)
   })
   @GetMapping
-  public ResponseEntity<List<Book>> getAllBooks() {
+  public ResponseEntity<List<BookInfo>> getAllBooks() {
     return bookService.getAllBooks();
   }
 

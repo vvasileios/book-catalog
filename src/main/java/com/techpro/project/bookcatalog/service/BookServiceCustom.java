@@ -1,6 +1,7 @@
 package com.techpro.project.bookcatalog.service;
 
 import com.techpro.project.bookcatalog.model.Book;
+import com.techpro.project.bookcatalog.model.BookInfo;
 import com.techpro.project.bookcatalog.repository.BookRepository;
 import com.techpro.project.bookcatalog.exception.NoSuchBookExistException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceCustom implements BookService {
@@ -18,7 +20,7 @@ public class BookServiceCustom implements BookService {
   BookRepository bookRepository;
 
   @Override
-  public ResponseEntity<List<Book>> getAllBooks() {
+  public ResponseEntity<List<BookInfo>> getAllBooks() {
     try {
       List<Book> books = bookRepository.findAll();
 
@@ -26,7 +28,11 @@ public class BookServiceCustom implements BookService {
         throw new NoSuchBookExistException("No books found.");
       }
 
-      return new ResponseEntity<>(books, HttpStatus.OK);
+      List<BookInfo> bookInfos = books.stream()
+          .map(book -> new BookInfo(book.getId(), book.getTitle(), book.getAuthor()))
+          .collect(Collectors.toList());
+
+      return new ResponseEntity<>(bookInfos, HttpStatus.OK);
     } catch (Exception e) {
       throw new NoSuchBookExistException("No books found. Please consider adding some books!");
     }
