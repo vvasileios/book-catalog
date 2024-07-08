@@ -5,6 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This interface extends JpaRepository to provide CRUD operations for the Book
+ * entity.
+ */
 public interface BookRepository extends JpaRepository<Book, Long> {
   List<Book> findByPublished(boolean published);
 

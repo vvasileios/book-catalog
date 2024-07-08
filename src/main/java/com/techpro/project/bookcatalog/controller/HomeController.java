@@ -5,6 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * This class is responsible for handling the root endpoint of the API.
+ * It provides a welcome message and a list of available endpoints.
+ * It also provides information about the project and the developer.
+ */
 @RestController
 public class HomeController {
 

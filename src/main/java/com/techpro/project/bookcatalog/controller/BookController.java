@@ -27,6 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * This class is responsible for handling HTTP requests related to the Book
+ * entity. It defines the endpoints for creating, reading, updating, and
+ * deleting books.
+ * It also provides endpoints for searching books by different criteria.
+ */
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/books")

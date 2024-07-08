@@ -7,6 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * This class represents a Book entity.
+ * It contains the fields of a book, such as title, author, summary, publication
+ * year, genre, and published status.
+ */
 @Entity
 @Table(name = "books")
 public class Book {

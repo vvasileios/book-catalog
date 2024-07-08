@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.List;
 
+/**
+ * This interface defines the methods that the BookService class must implement.
+ * It provides the basic CRUD operations for the Book entity.
+ */
 public interface BookService {
   ResponseEntity<List<BookInfo>> getAllBooks();
 

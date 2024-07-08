@@ -11,6 +11,15 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * This class is responsible for loading initial data into the book catalog
+ * database.
+ * It implements the CommandLineRunner interface to run the data loading process
+ * when the application starts.
+ * It reads a JSON file containing book data, converts it into a list of Book
+ * objects using Jackson ObjectMapper,
+ * and saves the books to the database using the BookRepository.
+ */
 @Component
 public class DataLoader implements CommandLineRunner {
 

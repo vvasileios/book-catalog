@@ -1,5 +1,10 @@
 package com.techpro.project.bookcatalog.model;
 
+/**
+ * This class represents a BookInfo entity.
+ * It contains the fields of a book, such as title, author, and ID.
+ * This class is used to provide a simplified view of a book entity when needed.
+ */
 public class BookInfo {
   private Long id;
   private String title;

@@ -9,6 +9,12 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 
+/**
+ * This class is responsible for configuring the OpenAPI documentation for the
+ * Book Catalog-Management System API.
+ * It defines the API title, version, description, contact information, and
+ * server URL.
+ */
 @Configuration
 public class OpenAPIConfiguration {
 

@@ -14,6 +14,10 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * This class implements the BookService interface and provides the methods to
+ * handle CRUD operations for the Book entity.
+ */
 @Service
 public class BookServiceCustom implements BookService {
   @Autowired
