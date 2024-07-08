@@ -25,21 +25,17 @@ public class BookServiceCustom implements BookService {
 
   @Override
   public Result getAllBooks() {
-    try {
-      List<Book> books = bookRepository.findAll();
+    List<Book> books = bookRepository.findAll();
 
-      if (books.isEmpty()) {
-        return new Result(false, StatusCode.NOT_FOUND, "No books found. Please consider adding some books!", null);
-      }
-
-      List<BookInfo> bookInfos = books.stream()
-          .map(book -> new BookInfo(book.getId(), book.getTitle(), book.getAuthor()))
-          .collect(Collectors.toList());
-
-      return new Result(true, StatusCode.SUCCESS, "Books retrieved successfully.", bookInfos);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error retrieving books.", null);
+    if (books.isEmpty()) {
+      return new Result(false, StatusCode.NOT_FOUND, "No books found. Please consider adding some books!", null);
     }
+
+    List<BookInfo> bookInfos = books.stream()
+        .map(book -> new BookInfo(book.getId(), book.getTitle(), book.getAuthor()))
+        .collect(Collectors.toList());
+
+    return new Result(true, StatusCode.SUCCESS, "Books retrieved successfully.", bookInfos);
   }
 
   @Override
@@ -55,46 +51,43 @@ public class BookServiceCustom implements BookService {
 
   @Override
   public Result createBook(Book book) {
-    try {
-      Optional<Book> existingBook = bookRepository.findByTitleAndAuthorContainingIgnoreCase(book.getTitle(),
-          book.getAuthor());
-      if (existingBook.isPresent()) {
-        return new Result(false, StatusCode.INVALID_ARGUMENT, "Book already exists", existingBook);
-      }
-      Book _book = bookRepository
-          .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
-              book.getPublicationYear(), book.getGenre()));
-      return new Result(true, StatusCode.SUCCESS, "Book saved successfully", _book);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error creating book", null);
+    Optional<Book> existingBook = bookRepository.findByTitleAndAuthorContainingIgnoreCase(book.getTitle(),
+        book.getAuthor());
+    if (existingBook.isPresent()) {
+      return new Result(false, StatusCode.INVALID_ARGUMENT, "Book already exists", existingBook);
     }
+    Book _book = bookRepository
+        .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
+            book.getPublicationYear(), book.getGenre()));
+    return new Result(true, StatusCode.SUCCESS, "Book saved successfully", _book);
   }
 
   @Override
   public Result createBooks(List<Book> books) {
-    try {
-      List<Book> existingBooks = bookRepository.findAll();
-      List<Book> newBooks = new ArrayList<>();
+    List<Book> existingBooks = bookRepository.findAll();
+    List<Book> newBooks = new ArrayList<>();
 
-      for (Book book : books) {
-        boolean exists = false;
-        for (Book existingBook : existingBooks) {
-          if (existingBook.getTitle().equalsIgnoreCase(book.getTitle())
-              && existingBook.getAuthor().equalsIgnoreCase(book.getAuthor())) {
-            exists = true;
-            break;
-          }
-        }
-        if (!exists) {
-          newBooks.add(book);
+    for (Book book : books) {
+      boolean exists = false;
+      for (Book existingBook : existingBooks) {
+        if (existingBook.getTitle().equalsIgnoreCase(book.getTitle())
+            && existingBook.getAuthor().equalsIgnoreCase(book.getAuthor())) {
+          exists = true;
+          break;
         }
       }
-
-      List<Book> savedBooks = bookRepository.saveAll(newBooks);
-      return new Result(true, StatusCode.SUCCESS, "Books saved successfully", savedBooks);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error creating books", null);
+      if (!exists) {
+        newBooks.add(book);
+      }
     }
+
+    List<Book> savedBooks = bookRepository.saveAll(newBooks);
+
+    if (savedBooks.isEmpty()) {
+      return new Result(false, StatusCode.INVALID_ARGUMENT, "Books already exist", null);
+    }
+
+    return new Result(true, StatusCode.SUCCESS, "Books saved successfully: " + savedBooks.size(), savedBooks);
   }
 
   @Override
@@ -117,87 +110,54 @@ public class BookServiceCustom implements BookService {
 
   @Override
   public Result deleteBook(Long id) {
-    try {
-      bookRepository.deleteById(id);
-      return new Result(true, StatusCode.SUCCESS, "Book deleted successfully", null);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Book not found with id: " + id, null);
-    }
+    bookRepository.deleteById(id);
+    return new Result(true, StatusCode.SUCCESS, "Book deleted successfully", null);
   }
 
   @Override
   public Result deleteAllBooks() {
-    try {
-      bookRepository.deleteAll();
-      return new Result(true, StatusCode.SUCCESS, "All books deleted successfully", null);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "No books found. Please consider adding some books!",
-          null);
-    }
+    bookRepository.deleteAll();
+    return new Result(true, StatusCode.SUCCESS, "All books deleted successfully", null);
   }
 
   @Override
   public Result findByPublished(boolean status) {
-    try {
-      List<Book> books = bookRepository.findByPublished(status);
+    List<Book> books = bookRepository.findByPublished(status);
 
-      if (books.isEmpty()) {
-        return new Result(false, StatusCode.NOT_FOUND, "No books found with published status: " + status, null);
-      }
-      return new Result(true, StatusCode.SUCCESS, "Books by published status: " + status + ", retrieved successfully.",
-          books);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
-          "Error retrieving books with published status: " + status,
-          null);
+    if (books.isEmpty()) {
+      return new Result(false, StatusCode.NOT_FOUND, "No books found with published status: " + status, null);
     }
+    return new Result(true, StatusCode.SUCCESS, "Books by published status: " + status + ", retrieved successfully.",
+        books);
   }
 
   @Override
   public Result findByAuthor(String author) {
-    try {
-      List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
+    List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
 
-      if (books.isEmpty()) {
-        return new Result(false, StatusCode.NOT_FOUND, "No books found with author: " + author, null);
-      }
-      return new Result(true, StatusCode.SUCCESS, "Books by author retrieved successfully.", books);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
-          "Error retrieving books with author: " + author,
-          null);
+    if (books.isEmpty()) {
+      return new Result(false, StatusCode.NOT_FOUND, "No books found with author: " + author, null);
     }
+    return new Result(true, StatusCode.SUCCESS, "Books by author retrieved successfully.", books);
   }
 
   @Override
   public Result findByTitle(String title) {
-    try {
-      List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
+    List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
-      if (books.isEmpty()) {
-        return new Result(false, StatusCode.NOT_FOUND, "No books found with title: " + title, null);
-      }
-      return new Result(true, StatusCode.SUCCESS, "Books by title retrieved successfully.", books);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
-          "Error retrieving books with title: " + title,
-          null);
+    if (books.isEmpty()) {
+      return new Result(false, StatusCode.NOT_FOUND, "No books found with title: " + title, null);
     }
+    return new Result(true, StatusCode.SUCCESS, "Books by title retrieved successfully.", books);
   }
 
   @Override
   public Result findByGenre(String genre) {
-    try {
-      List<Book> books = bookRepository.findByGenreContainingIgnoreCase(genre);
+    List<Book> books = bookRepository.findByGenreContainingIgnoreCase(genre);
 
-      if (books.isEmpty()) {
-        return new Result(false, StatusCode.NOT_FOUND, "No books found with genre: " + genre, null);
-      }
-      return new Result(true, StatusCode.SUCCESS, "Books by genre retrieved successfully.", books);
-    } catch (Exception e) {
-      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
-          "Error retrieving books with genre: " + genre,
-          null);
+    if (books.isEmpty()) {
+      return new Result(false, StatusCode.NOT_FOUND, "No books found with genre: " + genre, null);
     }
+    return new Result(true, StatusCode.SUCCESS, "Books by genre retrieved successfully.", books);
   }
 }
