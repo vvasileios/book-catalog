@@ -1,4 +1,4 @@
-package com.techpro.project.bookcatalog.config;
+package com.techpro.project.bookcatalog.system;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
