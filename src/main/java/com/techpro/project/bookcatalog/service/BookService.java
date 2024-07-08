@@ -1,10 +1,8 @@
 package com.techpro.project.bookcatalog.service;
 
 import com.techpro.project.bookcatalog.model.Book;
-import com.techpro.project.bookcatalog.model.BookInfo;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+import com.techpro.project.bookcatalog.system.result.Result;
 import java.util.List;
 
 /**
@@ -12,25 +10,25 @@ import java.util.List;
  * It provides the basic CRUD operations for the Book entity.
  */
 public interface BookService {
-  ResponseEntity<List<BookInfo>> getAllBooks();
+  Result getAllBooks();
 
-  ResponseEntity<Book> getBookById(Long id);
+  Result getBookById(Long id);
 
-  ResponseEntity<Book> createBook(Book book);
+  Result createBook(Book book);
 
-  ResponseEntity<List<Book>> createBooks(List<Book> books);
+  Result createBooks(List<Book> books);
 
-  ResponseEntity<Book> updateBook(Long id, Book book);
+  Result updateBook(Long id, Book book);
 
-  ResponseEntity<HttpStatus> deleteBook(Long id);
+  Result deleteBook(Long id);
 
-  ResponseEntity<HttpStatus> deleteAllBooks();
+  Result deleteAllBooks();
 
-  ResponseEntity<List<Book>> findByPublished(boolean status);
+  Result findByPublished(boolean status);
 
-  ResponseEntity<List<Book>> findByAuthor(String author);
+  Result findByAuthor(String author);
 
-  ResponseEntity<List<Book>> findByTitle(String title);
+  Result findByTitle(String title);
 
-  ResponseEntity<List<Book>> findByGenre(String genre);
+  Result findByGenre(String genre);
 }

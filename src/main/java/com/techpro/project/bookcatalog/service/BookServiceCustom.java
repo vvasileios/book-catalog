@@ -3,10 +3,10 @@ package com.techpro.project.bookcatalog.service;
 import com.techpro.project.bookcatalog.model.Book;
 import com.techpro.project.bookcatalog.model.BookInfo;
 import com.techpro.project.bookcatalog.repository.BookRepository;
-import com.techpro.project.bookcatalog.exception.NoSuchBookExistException;
+import com.techpro.project.bookcatalog.system.result.Result;
+import com.techpro.project.bookcatalog.system.result.StatusCode;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,55 +24,54 @@ public class BookServiceCustom implements BookService {
   BookRepository bookRepository;
 
   @Override
-  public ResponseEntity<List<BookInfo>> getAllBooks() {
+  public Result getAllBooks() {
     try {
       List<Book> books = bookRepository.findAll();
 
       if (books.isEmpty()) {
-        throw new NoSuchBookExistException("No books found.");
+        return new Result(false, StatusCode.NOT_FOUND, "No books found. Please consider adding some books!", null);
       }
 
       List<BookInfo> bookInfos = books.stream()
           .map(book -> new BookInfo(book.getId(), book.getTitle(), book.getAuthor()))
           .collect(Collectors.toList());
 
-      return new ResponseEntity<>(bookInfos, HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books retrieved successfully.", bookInfos);
     } catch (Exception e) {
-      throw new NoSuchBookExistException("No books found. Please consider adding some books!");
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error retrieving books.", null);
     }
   }
 
   @Override
-  public ResponseEntity<Book> getBookById(Long id) {
+  public Result getBookById(Long id) {
     Optional<Book> bookData = bookRepository.findById(id);
 
     if (bookData.isPresent()) {
-      return new ResponseEntity<>(bookData.get(), HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books retrieved successfully.", bookData);
     } else {
-      throw new NoSuchBookExistException("Book not found with id: " + id);
+      return new Result(false, StatusCode.NOT_FOUND, "Book not found with id: " + id, null);
     }
   }
 
   @Override
-  public ResponseEntity<Book> createBook(Book book) {
+  public Result createBook(Book book) {
     try {
       Optional<Book> existingBook = bookRepository.findByTitleAndAuthorContainingIgnoreCase(book.getTitle(),
           book.getAuthor());
       if (existingBook.isPresent()) {
-        throw new RuntimeException(
-            "Book already exists with title: " + book.getTitle() + " and author: " + book.getAuthor());
+        return new Result(false, StatusCode.INVALID_ARGUMENT, "Book already exists", existingBook);
       }
       Book _book = bookRepository
           .save(new Book(book.getTitle(), book.getAuthor(), book.getSummary(), book.isPublished(),
               book.getPublicationYear(), book.getGenre()));
-      return new ResponseEntity<>(_book, HttpStatus.CREATED);
+      return new Result(true, StatusCode.SUCCESS, "Book saved successfully", _book);
     } catch (Exception e) {
-      throw new RuntimeException("Error creating book", e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error creating book", null);
     }
   }
 
   @Override
-  public ResponseEntity<List<Book>> createBooks(List<Book> books) {
+  public Result createBooks(List<Book> books) {
     try {
       List<Book> existingBooks = bookRepository.findAll();
       List<Book> newBooks = new ArrayList<>();
@@ -92,14 +91,14 @@ public class BookServiceCustom implements BookService {
       }
 
       List<Book> savedBooks = bookRepository.saveAll(newBooks);
-      return new ResponseEntity<>(savedBooks, HttpStatus.CREATED);
+      return new Result(true, StatusCode.SUCCESS, "Books saved successfully", savedBooks);
     } catch (Exception e) {
-      throw new RuntimeException("Error creating books", e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Error creating books", null);
     }
   }
 
   @Override
-  public ResponseEntity<Book> updateBook(Long id, Book book) {
+  public Result updateBook(Long id, Book book) {
     Optional<Book> bookData = bookRepository.findById(id);
 
     if (bookData.isPresent()) {
@@ -110,85 +109,95 @@ public class BookServiceCustom implements BookService {
       _book.setPublished(book.isPublished());
       _book.setPublicationYear(book.getPublicationYear());
       _book.setGenre(book.getGenre());
-      return new ResponseEntity<>(bookRepository.save(_book), HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Book updated successfully", bookRepository.save(_book));
     } else {
-      throw new NoSuchBookExistException("Book not found with id: " + id);
+      return new Result(false, StatusCode.NOT_FOUND, "Book not found with id: " + id, null);
     }
   }
 
   @Override
-  public ResponseEntity<HttpStatus> deleteBook(Long id) {
+  public Result deleteBook(Long id) {
     try {
       bookRepository.deleteById(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      return new Result(true, StatusCode.SUCCESS, "Book deleted successfully", null);
     } catch (Exception e) {
-      throw new NoSuchBookExistException("Book not found with id: " + id);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "Book not found with id: " + id, null);
     }
   }
 
   @Override
-  public ResponseEntity<HttpStatus> deleteAllBooks() {
+  public Result deleteAllBooks() {
     try {
       bookRepository.deleteAll();
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      return new Result(true, StatusCode.SUCCESS, "All books deleted successfully", null);
     } catch (Exception e) {
-      throw new NoSuchBookExistException("No books found.");
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR, "No books found. Please consider adding some books!",
+          null);
     }
   }
 
   @Override
-  public ResponseEntity<List<Book>> findByPublished(boolean status) {
+  public Result findByPublished(boolean status) {
     try {
       List<Book> books = bookRepository.findByPublished(status);
 
       if (books.isEmpty()) {
-        throw new NoSuchBookExistException("No books found with published status: " + status);
+        return new Result(false, StatusCode.NOT_FOUND, "No books found with published status: " + status, null);
       }
-      return new ResponseEntity<>(books, HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books by published status: " + status + ", retrieved successfully.",
+          books);
     } catch (Exception e) {
-      throw new RuntimeException("Error retrieving books with published status: " + status, e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
+          "Error retrieving books with published status: " + status,
+          null);
     }
   }
 
   @Override
-  public ResponseEntity<List<Book>> findByAuthor(String author) {
+  public Result findByAuthor(String author) {
     try {
       List<Book> books = bookRepository.findByAuthorContainingIgnoreCase(author);
 
       if (books.isEmpty()) {
-        throw new NoSuchBookExistException("No books found with author: " + author);
+        return new Result(false, StatusCode.NOT_FOUND, "No books found with author: " + author, null);
       }
-      return new ResponseEntity<>(books, HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books by author retrieved successfully.", books);
     } catch (Exception e) {
-      throw new RuntimeException("Error retrieving books with author: " + author, e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
+          "Error retrieving books with author: " + author,
+          null);
     }
   }
 
   @Override
-  public ResponseEntity<List<Book>> findByTitle(String title) {
+  public Result findByTitle(String title) {
     try {
       List<Book> books = bookRepository.findByTitleContainingIgnoreCase(title);
 
       if (books.isEmpty()) {
-        throw new NoSuchBookExistException("No books found with title: " + title);
+        return new Result(false, StatusCode.NOT_FOUND, "No books found with title: " + title, null);
       }
-      return new ResponseEntity<>(books, HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books by title retrieved successfully.", books);
     } catch (Exception e) {
-      throw new RuntimeException("Error retrieving books with title: " + title, e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
+          "Error retrieving books with title: " + title,
+          null);
     }
   }
 
   @Override
-  public ResponseEntity<List<Book>> findByGenre(String genre) {
+  public Result findByGenre(String genre) {
     try {
       List<Book> books = bookRepository.findByGenreContainingIgnoreCase(genre);
 
       if (books.isEmpty()) {
-        throw new NoSuchBookExistException("No books found with genre: " + genre);
+        return new Result(false, StatusCode.NOT_FOUND, "No books found with genre: " + genre, null);
       }
-      return new ResponseEntity<>(books, HttpStatus.OK);
+      return new Result(true, StatusCode.SUCCESS, "Books by genre retrieved successfully.", books);
     } catch (Exception e) {
-      throw new RuntimeException("Error retrieving books with genre: " + genre, e);
+      return new Result(false, StatusCode.INTERNAL_SERVER_ERROR,
+          "Error retrieving books with genre: " + genre,
+          null);
     }
   }
 }

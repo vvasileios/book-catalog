@@ -1,4 +1,4 @@
-package com.techpro.project.bookcatalog.exception;
+package com.techpro.project.bookcatalog.system.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
