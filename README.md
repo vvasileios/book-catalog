@@ -80,6 +80,41 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
 2. Book Controller
   - GET `/books`
     - Retrieve all books available.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books
+        ```
+      **Example Response:**
+      "flag": true,
+      "code": 200,
+      "message": "Books retrieved successfully.",
+      "data": [
+        {
+            "id": 1,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee"
+        },
+        {
+            "id": 2,
+            "title": "Go Set a Watchman",
+            "author": "Harper Lee"
+        },
+        {
+            "id": 3,
+            "title": "Pride and Prejudice",
+            "author": "Jane Austen"
+        },
+        {
+            "id": 4,
+            "title": "Sense and Sensibility",
+            "author": "Jane Austen"
+        },
+        {
+            "id": 5,
+            "title": "The Catcher in the Rye",
+            "author": "J.D. Salinger"
+        },
+      ]
   - GET `/books/{id}`
     - Retrieve a book by its ID.
   - POST `/books/add`
