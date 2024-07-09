@@ -82,7 +82,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Retrieve all books available.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books
+        GET http://localhost:8080/books
         ```
       **Example Response:**
       ```json
@@ -123,7 +123,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Retrieve a book by its ID.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/1
+        GET http://localhost:8080/books/1
         ```
       **Example Response:**
       ```json
@@ -146,7 +146,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Add a new book.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/add
+        GET http://localhost:8080/books/add
         ```
       **Example Response:**
       ```json
@@ -169,7 +169,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Add multiple new books.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books
+        GET http://localhost:8080/books
         ```
       **Example Response:**
       ```json
@@ -230,7 +230,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Update an existing book by ID.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/49
+        GET http://localhost:8080/books/49
         ```
       **Example Response:**
       ```json
@@ -253,7 +253,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Delete a book by ID.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/49
+        GET http://localhost:8080/books/49
         ```
       **Example Response:**
       ```json
@@ -268,7 +268,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Delete all books.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books
+        GET http://localhost:8080/books
         ```
       **Example Response:**
       ```json
@@ -283,7 +283,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Find books by published status.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/published?status=true or false 
+        GET http://localhost:8080/books/published?status=true or false 
         ```
       **Example Response:**
       ```json
@@ -326,7 +326,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Find books by author.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/author?author=harper+lee
+        GET http://localhost:8080/books/author?author=harper+lee
         ```
       **Example Response:**
       ```json
@@ -360,7 +360,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Find books by title.
       **Example Request:**
         ```bash
-        curl -X GET http://localhost:8080/books/title?title=To+Kill+a+Mockingbird
+        GET http://localhost:8080/books/title?title=To+Kill+a+Mockingbird
         ```
       **Example Response:**
       ```json
@@ -385,7 +385,7 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
     - Find books by genre.
       **Example Request:**
         ```bash
-        curl -X GET hhttp://localhost:8080/books/genre?genre=fiction
+        GET hhttp://localhost:8080/books/genre?genre=fiction
         ```
       **Example Response:**
       ```json
