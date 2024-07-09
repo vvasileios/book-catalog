@@ -85,56 +85,354 @@ The application run at `http://localhost:8080`. When loaded it provides extra in
         curl -X GET http://localhost:8080/books
         ```
       **Example Response:**
-      "flag": true,
-      "code": 200,
-      "message": "Books retrieved successfully.",
-      "data": [
-        {
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books retrieved successfully.",
+        "data": [
+          {
             "id": 1,
             "title": "To Kill a Mockingbird",
             "author": "Harper Lee"
-        },
-        {
+          },
+          {
             "id": 2,
             "title": "Go Set a Watchman",
             "author": "Harper Lee"
-        },
-        {
+          },
+          {
             "id": 3,
             "title": "Pride and Prejudice",
             "author": "Jane Austen"
-        },
-        {
+          },
+          {
             "id": 4,
             "title": "Sense and Sensibility",
             "author": "Jane Austen"
-        },
-        {
+          },
+          {
             "id": 5,
             "title": "The Catcher in the Rye",
             "author": "J.D. Salinger"
-        },
-      ]
+          },
+        ]
+      }
+      ```
   - GET `/books/{id}`
     - Retrieve a book by its ID.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/1
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Book retrieved successfully.",
+        "data": {
+          "id": 1,
+          "title": "To Kill a Mockingbird",
+          "author": "Harper Lee",
+          "summary": "A novel about the serious issues of rape and racial inequality.",
+          "published": true,
+          "publicationYear": 1960,
+          "genre": "Fiction"
+        }
+      }
+      ```
   - POST `/books/add`
     - Add a new book.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/add
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Book saved successfully",
+        "data": {
+          "id": 47,
+          "title": "To Kill a Mockingbird",
+          "author": "Harper Lee",
+          "summary": "A novel about the serious issues of rape and racial inequality.",
+          "published": false,
+          "publicationYear": 1960,
+          "genre": "Fiction"
+        }
+      }
+      ```
   - POST `/books`
     - Add multiple new books.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books saved successfully: 5",
+        "data": [
+          {
+            "id": 48,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee",
+            "summary": "A novel about the serious issues of rape and racial inequality.",
+            "published": true,
+            "publicationYear": 1960,
+            "genre": "Fiction"
+          },
+          {
+            "id": 49,
+            "title": "Go Set a Watchman",
+            "author": "Harper Lee",
+            "summary": "A novel about Scout Finch returning to Maycomb.",
+            "published": false,
+            "publicationYear": 2015,
+            "genre": "Fiction"
+          },
+          {
+            "id": 50,
+            "title": "Pride and Prejudice",
+            "author": "Jane Austen",
+            "summary": "A romantic novel that charts the emotional development of the protagonist Elizabeth Bennet.",
+            "published": true,
+            "publicationYear": 1813,
+            "genre": "Romance"
+          },
+          {
+            "id": 51,
+            "title": "Sense and Sensibility",
+            "author": "Jane Austen",
+            "summary": "A novel about the lives and loves of the Dashwood sisters.",
+            "published": false,
+            "publicationYear": 1811,
+            "genre": "Romance"
+          },
+          {
+            "id": 52,
+            "title": "The Catcher in the Rye",
+            "author": "J.D. Salinger",
+            "summary": "A story about teenage rebellion and alienation.",
+            "published": true,
+            "publicationYear": 1951,
+            "genre": "Fiction"
+          },
+        ]
+      }
+      ```
   - PUT `/books/{id}`
     - Update an existing book by ID.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/49
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Book updated successfully",
+        "data": {
+          "id": 49,
+          "title": "Animal Farm",
+          "author": "George Orwell",
+          "summary": "An allegorical novella about a group of farm animals who rebel against their human farmer.",
+          "published": false,
+          "publicationYear": 1945,
+          "genre": "Political Satire"
+        }
+      }
+      ```
   - DELETE `/books/{id}`
     - Delete a book by ID.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/49
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Book deleted successfully",
+        "data": null
+      }
+      ```
   - DELETE `/books`
     - Delete all books.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "All books deleted successfully",
+        "data": null
+      }
+      ```
   - GET `/books/published`
     - Find books by published status.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/published?status=true or false 
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books by published status: true, retrieved successfully.",
+        "data": [
+          {
+              "id": 94,
+              "title": "To Kill a Mockingbird",
+              "author": "Harper Lee",
+              "summary": "A novel about the serious issues of rape and racial inequality.",
+              "published": true,
+              "publicationYear": 1960,
+              "genre": "Fiction"
+          },
+          {
+              "id": 96,
+              "title": "Pride and Prejudice",
+              "author": "Jane Austen",
+              "summary": "A romantic novel that charts the emotional development of the protagonist Elizabeth Bennet.",
+              "published": true,
+              "publicationYear": 1813,
+              "genre": "Romance"
+          },
+          {
+              "id": 98,
+              "title": "The Catcher in the Rye",
+              "author": "J.D. Salinger",
+              "summary": "A story about teenage rebellion and alienation.",
+              "published": true,
+              "publicationYear": 1951,
+              "genre": "Fiction"
+          }
+        ]
+      }
+      ```
   - GET `/books/author`
     - Find books by author.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/author?author=harper+lee
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books by author retrieved successfully.",
+        "data": [
+          {
+            "id": 94,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee",
+            "summary": "A novel about the serious issues of rape and racial inequality.",
+            "published": true,
+            "publicationYear": 1960,
+            "genre": "Fiction"
+          },
+          {
+            "id": 95,
+            "title": "Go Set a Watchman",
+            "author": "Harper Lee",
+            "summary": "A novel about Scout Finch returning to Maycomb.",
+            "published": false,
+            "publicationYear": 2015,
+            "genre": "Fiction"
+          }
+        ]
+      }
+      ```
   - GET `/books/title`
     - Find books by title.
+      **Example Request:**
+        ```bash
+        curl -X GET http://localhost:8080/books/title?title=To+Kill+a+Mockingbird
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books by title retrieved successfully.",
+        "data": [
+          {
+            "id": 94,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee",
+            "summary": "A novel about the serious issues of rape and racial inequality.",
+            "published": true,
+            "publicationYear": 1960,
+            "genre": "Fiction"
+          }
+        ]
+      }
+      ```
   - GET `/books/genre`
     - Find books by genre.
+      **Example Request:**
+        ```bash
+        curl -X GET hhttp://localhost:8080/books/genre?genre=fiction
+        ```
+      **Example Response:**
+      ```json
+      {
+        "flag": true,
+        "code": 200,
+        "message": "Books by genre retrieved successfully.",
+        "data": [
+          {
+            "id": 94,
+            "title": "To Kill a Mockingbird",
+            "author": "Harper Lee",
+            "summary": "A novel about the serious issues of rape and racial inequality.",
+            "published": true,
+            "publicationYear": 1960,
+            "genre": "Fiction"
+          },
+          {
+            "id": 95,
+            "title": "Go Set a Watchman",
+            "author": "Harper Lee",
+            "summary": "A novel about Scout Finch returning to Maycomb.",
+            "published": false,
+            "publicationYear": 2015,
+            "genre": "Fiction"
+          },
+          {
+            "id": 98,
+            "title": "The Catcher in the Rye",
+            "author": "J.D. Salinger",
+            "summary": "A story about teenage rebellion and alienation.",
+            "published": true,
+            "publicationYear": 1951,
+            "genre": "Fiction"
+          },
+          {
+            "id": 99,
+            "title": "Franny and Zooey",
+            "author": "J.D. Salinger",
+            "summary": "A novel about the Glass family.",
+            "published": false,
+            "publicationYear": 1961,
+            "genre": "Fiction"
+          }
+        ]
+      }
+      ```
 
 ## Database Initialization
 

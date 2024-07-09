@@ -43,7 +43,7 @@ public class BookServiceCustom implements BookService {
     Optional<Book> bookData = bookRepository.findById(id);
 
     if (bookData.isPresent()) {
-      return new Result(true, StatusCode.SUCCESS, "Books retrieved successfully.", bookData);
+      return new Result(true, StatusCode.SUCCESS, "Book retrieved successfully.", bookData);
     } else {
       return new Result(false, StatusCode.NOT_FOUND, "Book not found with id: " + id, null);
     }
